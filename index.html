@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Desarrollo y Arquitectura de Sistemas con Agentes IA</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#3b82f6',
+                        secondary: '#1e293b',
+                        accent: '#10b981',
+                        surface: '#ffffff',
+                        background: '#f8fafc',
+                        textMain: '#334155',
+                        textLight: '#64748b'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['Fira Code', 'monospace']
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: #334155; }
+        .code-block { font-family: 'Fira Code', monospace; font-size: 0.875rem; }
+        
+        /* Smooth scrolling for anchor links */
+        html { scroll-behavior: smooth; }
+        
+        /* Custom scrollbar for sidebar */
+        .sidebar::-webkit-scrollbar { width: 6px; }
+        .sidebar::-webkit-scrollbar-track { background: transparent; }
+        .sidebar::-webkit-scrollbar-thumb { background-color: #cbd5e1; border-radius: 20px; }
+        
+        /* Typography specifics */
+        h1, h2, h3, h4 { color: #0f172a; }
+        p { line-height: 1.7; margin-bottom: 1.25rem; }
+        
+        /* Highlight styling */
+        .highlight { background-color: rgba(59, 130, 246, 0.1); border-left: 4px solid #3b82f6; padding: 1rem; border-radius: 0 0.5rem 0.5rem 0; margin-bottom: 1.5rem; }
+        
+        /* Table styling */
+        table { width: 100%; border-collapse: collapse; margin-bottom: 2rem; }
+        th, td { border: 1px solid #e2e8f0; padding: 0.75rem; text-align: left; }
+        th { background-color: #f1f5f9; font-weight: 600; }
+        
+        /* Interactive Nav Link Styling */
+        .nav-link { transition: all 0.2s ease; cursor: pointer; }
+        .nav-link:hover { background-color: #eff6ff; color: #2563eb; }
+        .nav-link.active { background-color: #eff6ff; color: #2563eb; border-right: 3px solid #2563eb; font-weight: 600; }
+        
+        /* Mobile menu transition */
+        #mobile-menu { transition: transform 0.3s ease-in-out; }
+    </style>
+</head>
+<body class="flex h-screen overflow-hidden antialiased">
+
+    <!-- Mobile overlay -->
+    <div id="mobile-overlay" class="fixed inset-0 bg-slate-900/50 z-20 hidden lg:hidden" onclick="toggleMobileMenu()"></div>
+
+    <!-- Sidebar -->
+    <aside id="sidebar" class="sidebar bg-white w-72 lg:w-80 h-full border-r border-slate-200 flex flex-col fixed lg:relative z-30 transform -translate-x-full lg:translate-x-0 transition-transform duration-300">
+        <div class="p-6 border-b border-slate-200 flex justify-between items-center bg-slate-50">
+            <h1 class="text-xl font-bold text-slate-800 leading-tight">Arquitectura de Agentes IA</h1>
+            <button onclick="toggleMobileMenu()" class="lg:hidden text-slate-500 hover:text-slate-800 focus:outline-none">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+        </div>
+        
+        <nav class="flex-1 overflow-y-auto p-4 space-y-6">
+            <div>
+                <h3 class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Módulo 1: Desarrollo Fundacional</h3>
+                <ul class="space-y-1">
+                    <li><a onclick="loadContent('harness')" class="nav-link active block py-2 px-3 rounded-md text-sm text-slate-600">Harness Engineering</a></li>
+                    <li><a onclick="loadContent('sdd')" class="nav-link block py-2 px-3 rounded-md text-sm text-slate-600">Spec-Driven Development (SDD)</a></li>
+                    <li><a onclick="loadContent('adversarial')" class="nav-link block py-2 px-3 rounded-md text-sm text-slate-600">Revisión Adversarial</a></li>
+                    <li><a onclick="loadContent('evals')" class="nav-link block py-2 px-3 rounded-md text-sm text-slate-600">Evaluaciones (Evals)</a></li>
+                    <li><a onclick="loadContent('adopcion')" class="nav-link block py-2 px-3 rounded-md text-sm text-slate-600">Privacidad y Adopción</a></li>
+                </ul>
+            </div>
+            
+            <div>
+                <h3 class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Módulo 2: Programación Aplicada</h3>
+                <ul class="space-y-1">
+                    <li><a onclick="loadContent('vectorial')" class="nav-link block py-2 px-3 rounded-md text-sm text-slate-600">Bases de Datos Vectoriales</a></li>
+                    <li><a onclick="loadContent('backend')" class="nav-link block py-2 px-3 rounded-md text-sm text-slate-600">Modernización de Backend</a></li>
+                    <li><a onclick="loadContent('qa')" class="nav-link block py-2 px-3 rounded-md text-sm text-slate-600">Automatización QA (Playwright)</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h3 class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Módulo 3: Productos Complejos</h3>
+                <ul class="space-y-1">
+                    <li><a onclick="loadContent('chatbots')" class="nav-link block py-2 px-3 rounded-md text-sm text-slate-600">Interfaces en Tiempo Real</a></li>
+                    <li><a onclick="loadContent('multiagente')" class="nav-link block py-2 px-3 rounded-md text-sm text-slate-600">Topologías Multi-Agente</a></li>
+                </ul>
+            </div>
+        </nav>
+        
+        <div class="p-4 border-t border-slate-200 bg-slate-50 text-xs text-slate-500 text-center">
+            Plataforma Curso v1.0
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 flex flex-col h-full overflow-hidden bg-white relative">
+        <!-- Header -->
+        <header class="bg-white border-b border-slate-200 px-6 py-4 flex items-center justify-between sticky top-0 z-10 shadow-sm">
+            <div class="flex items-center">
+                <button onclick="toggleMobileMenu()" class="mr-4 lg:hidden text-slate-500 hover:text-slate-800 focus:outline-none">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                </button>
+                <div class="text-sm text-slate-500 font-medium" id="breadcrumb">Módulo 1 / Harness Engineering</div>
+            </div>
+            <div class="flex items-center gap-3">
+                <span class="inline-flex items-center rounded-md bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10">Nivel Avanzado</span>
+            </div>
+        </header>
+
+        <!-- Dynamic Content Container -->
+        <div id="content-area" class="flex-1 overflow-y-auto p-6 md:p-10 max-w-4xl mx-auto w-full scroll-smooth">
+            <!-- Content will be injected here via JS -->
+        </div>
+    </main>
+
+    <script>
+        // Content Database
+        const courseContent = {
+            'harness': `
+                <div class="mb-8">
+                    <h1 class="text-3xl md:text-4xl font-bold text-slate-800 mb-4 tracking-tight">Ingeniería de Arneses (Harness Engineering)</h1>
+                    <p class="text-lg text-slate-600 leading-relaxed">El paradigma fundamental: <strong class="text-slate-800">Agente = Modelo + Arnés</strong>. Un modelo por sí solo es un motor probabilístico; el arnés es la infraestructura que le otorga memoria, herramientas, seguridad y un bucle de ejecución determinista.</p>
+                </div>
+
+                <div class="highlight">
+                    <h4 class="font-semibold text-blue-800 mb-2">Concepto Clave</h4>
+                    <p class="text-sm text-blue-900 m-0">La ingeniería de arneses opera asumiendo que los modelos cometerán errores. En lugar de alargar prompts infinitamente, modificamos el entorno de ejecución (harness) mediante restricciones, verificaciones y límites de memoria para interceptar fallos antes de que afecten el sistema.</p>
+                </div>
+
+                <h2 class="text-2xl font-semibold mt-10 mb-4 border-b pb-2">Despliegue y Autenticación con Claude Code</h2>
+                <p>Claude Code es un ejemplo líder de arnés agéntico operado desde la terminal. Implementa los 7 bloques esenciales: bucle agéntico, herramientas, gestión de contexto, memoria persistente, permisos, verificación y subagentes.</p>
+                
+                <div class="bg-slate-900 rounded-lg overflow-hidden my-6 shadow-md">
+                    <div class="flex items-center justify-between px-4 py-2 bg-slate-800 border-b border-slate-700">
+                        <span class="text-xs font-mono text-slate-400">bash / terminal</span>
+                        <button onclick="copyCode('code-install')" class="text-xs text-slate-400 hover:text-white transition">Copiar</button>
+                    </div>
+                    <div class="p-4 overflow-x-auto">
+                        <code id="code-install" class="code-block text-green-400">
+# Instalación recomendada en entornos macOS/Linux vía script nativo<br>
+curl -fsSL https://claude.ai/install.sh | bash<br><br>
+# Configuración para despliegues empresariales (ej. AWS Bedrock)<br>
+export CLAUDE_CODE_USE_BEDROCK=1<br>
+export AWS_REGION=us-east-1<br>
+export AWS_PROFILE=enterprise-dev-profile<br><br>
+# Iniciar el agente<br>
+claude
+                        </code>
+                    </div>
+                </div>
+
+                <h2 class="text-2xl font-semibold mt-10 mb-4 border-b pb-2">Arquitectura de Memoria (Las 5 Capas)</h2>
+                <p>Para evitar la degradación del contexto (fenómeno "lost in the middle"), se implementa un sistema jerárquico:</p>
+                <ul class="list-disc pl-6 space-y-2 mb-6">
+                    <li><strong>1. Capa Organizacional:</strong> <code class="bg-slate-100 text-pink-600 px-1 rounded">/etc/claude-code/CLAUDE.md</code> - Estándares de toda la empresa.</li>
+                    <li><strong>2. Capa de Usuario:</strong> <code class="bg-slate-100 text-pink-600 px-1 rounded">~/.claude/CLAUDE.md</code> - Preferencias del desarrollador.</li>
+                    <li><strong>3. Capa de Proyecto (Maestra):</strong> <code class="bg-slate-100 text-pink-600 px-1 rounded">./CLAUDE.md</code> - Versionada en Git. Arquitectura y convenciones.</li>
+                    <li><strong>4. Capa Local Efímera:</strong> <code class="bg-slate-100 text-pink-600 px-1 rounded">./CLAUDE.local.md</code> - Flujos temporales excluidos de Git.</li>
+                    <li><strong>5. Memoria Epistémica:</strong> <code class="bg-slate-100 text-pink-600 px-1 rounded">MEMORY.md</code> - Aprendizajes automáticos limitados a 25KB para proteger el contexto.</li>
+                </ul>
+
+                <h2 class="text-2xl font-semibold mt-10 mb-4 border-b pb-2">Model Context Protocol (MCP)</h2>
+                <p>El estándar de facto para conectar agentes con bases de datos y herramientas sin inyectar credenciales en el prompt.</p>
+
+                <div class="bg-slate-900 rounded-lg overflow-hidden my-6 shadow-md">
+                    <div class="flex items-center justify-between px-4 py-2 bg-slate-800 border-b border-slate-700">
+                        <span class="text-xs font-mono text-slate-400">bash / configuración MCP</span>
+                        <button onclick="copyCode('code-mcp')" class="text-xs text-slate-400 hover:text-white transition">Copiar</button>
+                    </div>
+                    <div class="p-4 overflow-x-auto">
+                        <code id="code-mcp" class="code-block text-blue-300">
+# Añadir servidor Postgres MCP al contexto del proyecto (compartido)<br>
+claude mcp add --scope project --transport stdio postgres-db -- npx -y @modelcontextprotocol/server-postgres "postgresql://user:pass@localhost/db"<br><br>
+# Añadir integración GitHub a nivel de usuario local<br>
+claude mcp add --scope user --transport http github https://api.github.com/mcp
+                        </code>
+                    </div>
+                </div>
+                
+                <div class="mt-8 flex justify-end">
+                    <button onclick="loadContent('sdd')" class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md transition inline-flex items-center">
+                        Siguiente: Spec-Driven Development
+                        <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                    </button>
+                </div>
+            `,
+            'sdd': `
+                <div class="mb-8">
+                    <h1 class="text-3xl md:text-4xl font-bold text-slate-800 mb-4 tracking-tight">Spec-Driven Development (SDD)</h1>
+                    <p class="text-lg text-slate-600 leading-relaxed">El antídoto contra el "vibe coding". SDD eleva la especificación documentada a <strong class="text-slate-800">única fuente de verdad</strong>. No se tira código a lo loco; primero se diseña, se acuerda el "contrato", y luego el agente ejecuta en base a ese documento.</p>
+                </div>
+
+                <div class="highlight">
+                    <h4 class="font-semibold text-blue-800 mb-2">El Problema del "Vibe Coding"</h4>
+                    <p class="text-sm text-blue-900 m-0">Pedirle a un LLM cambios abstractos de forma iterativa genera sistemas frágiles donde las dependencias colisionan. SDD separa la planificación de la ejecución, permitiendo paralelismo real.</p>
+                </div>
+
+                <h2 class="text-2xl font-semibold mt-10 mb-4 border-b pb-2">Implementación con OpenSpec CLI</h2>
+                <p>OpenSpec estructura el desarrollo en fases claras, apoyándose fuertemente en Git WorkTrees para lograr aislamientos y paralelismo sin conflictos.</p>
+                
+                <div class="bg-slate-900 rounded-lg overflow-hidden my-6 shadow-md">
+                    <div class="flex items-center justify-between px-4 py-2 bg-slate-800 border-b border-slate-700">
+                        <span class="text-xs font-mono text-slate-400">bash / OpenSpec Workflow</span>
+                        <button onclick="copyCode('code-openspec')" class="text-xs text-slate-400 hover:text-white transition">Copiar</button>
+                    </div>
+                    <div class="p-4 overflow-x-auto">
+                        <code id="code-openspec" class="code-block text-purple-300">
+# 1. Inicialización (configura estructura e inyecta habilidades de agente)<br>
+openspec init<br><br>
+# 2. Exploración (debate arquitectónico sin alterar código)<br>
+/opsx:explore "Necesito añadir un login JWT al backend"<br><br>
+# 3. Propuesta (genera Especificación Delta: qué se añade/modifica/borra)<br>
+/opsx:propose<br><br>
+# 4. Ejecución (El agente consume design.md y ejecuta tasks.md)<br>
+/opsx:apply<br><br>
+# 5. Consolidación (Integra la Delta Spec en la especificación maestra)<br>
+/opsx:sync && /opsx:archive
+                        </code>
+                    </div>
+                </div>
+
+                <h3 class="text-xl font-semibold mt-8 mb-3">El Rol de Git WorkTrees</h3>
+                <p>A diferencia de las ramas normales donde debes hacer 'checkout' perdiendo el contexto de tu IDE, los <strong>Git WorkTrees</strong> clonan la rama en un directorio físico separado (ej. <code>.worktrees/feature-login</code>). Esto permite que el agente aplique cambios en <code>/opsx:apply</code> en un directorio mientras tú sigues revisando otra rama en paralelo en el directorio principal.</p>
+
+                <h3 class="text-xl font-semibold mt-8 mb-3">Architectural Decision Records (ADRs)</h3>
+                <p>Mientras que la <em>Spec</em> documenta <strong>qué</strong> hace el sistema ahora, el <em>ADR</em> preserva el <strong>por qué</strong>. Las opciones evaluadas y descartadas se guardan para que futuros agentes no intenten repetir errores del pasado inferiendo a ciegas.</p>
+
+                <div class="mt-8 flex justify-between">
+                    <button onclick="loadContent('harness')" class="text-slate-500 hover:text-slate-800 font-medium transition inline-flex items-center">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                        Anterior
+                    </button>
+                    <button onclick="loadContent('adversarial')" class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md transition inline-flex items-center">
+                        Siguiente: Revisión Adversarial
+                        <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                    </button>
+                </div>
+            `,
+            'adversarial': `
+                <div class="mb-8">
+                    <h1 class="text-3xl md:text-4xl font-bold text-slate-800 mb-4 tracking-tight">Revisión Adversarial y Seguridad</h1>
+                    <p class="text-lg text-slate-600 leading-relaxed">Conectar agentes a sistemas empresariales expone superficies de ataque masivas, especialmente la <strong>Inyección de Prompts Indirecta</strong>. El 79% de los "bugs de seguridad" detectados por agentes autónomos evaluándose a sí mismos son falsos positivos.</p>
+                </div>
+
+                <div class="highlight border-red-500 bg-red-50">
+                    <h4 class="font-semibold text-red-800 mb-2">El Peligro LLM2IDOR</h4>
+                    <p class="text-sm text-red-900 m-0">Inferencia Insegura de Referencia Directa a Objetos. Un atacante deja un string en un repo/email. El agente lo lee como contexto, inyecta sintaxis (ej. Jinja2) y al ejecutarse, extrae base de datos ignorando controles de acceso.</p>
+                </div>
+
+                <h2 class="text-2xl font-semibold mt-10 mb-4 border-b pb-2">Metodología "Refute-or-Promote"</h2>
+                <p>Nunca permitas que un agente verifique su propio trabajo. Se implementa una revisión de etapas separando al creador del destructor.</p>
+                
+                <ol class="list-decimal pl-6 space-y-4 mb-6 mt-4">
+                    <li>
+                        <strong>Validación Empírica Obligatoria:</strong> Si un agente afirma encontrar o solucionar un bug, debe ser obligado por el arnés a compilar el proyecto y ejecutar el test de regresión. Las asunciones lógicas de un LLM fallan; solo la compilación es verdad absoluta.
+                    </li>
+                    <li>
+                        <strong>Verificación entre Modelos (Cross-Model):</strong> Asigna la revisión a una familia diferente. Si Claude generó el código, utiliza OpenAI Codex o Gemini para la revisión adversarial. Esto previene la "alucinación cooperativa" donde modelos similares coinciden en lógicas erróneas por sesgos de entrenamiento.
+                    </li>
+                </ol>
+
+                <div class="bg-white border border-slate-200 rounded-lg p-5 mt-8 shadow-sm">
+                    <h4 class="font-bold text-slate-800 mb-3">Configuración Segura de Permisos en Arnés</h4>
+                    <p class="text-sm text-slate-600 mb-3">Implementación estándar para sistemas en producción en el archivo <code>settings.json</code>:</p>
+                    <ul class="text-sm font-mono text-slate-700 space-y-2">
+                        <li><span class="text-green-600 bg-green-100 px-2 py-0.5 rounded mr-2">ALLOW</span> Consultas SELECT (Solo lectura a través de MCP)</li>
+                        <li><span class="text-yellow-600 bg-yellow-100 px-2 py-0.5 rounded mr-2">ASK</span> Mutaciones, commits, despliegues (Requiere intervención humana)</li>
+                        <li><span class="text-red-600 bg-red-100 px-2 py-0.5 rounded mr-2">DENY</span> DROP, DELETE masivos, exportación de bases de datos</li>
+                    </ul>
+                </div>
+
+                <div class="mt-8 flex justify-between">
+                    <button onclick="loadContent('sdd')" class="text-slate-500 hover:text-slate-800 font-medium transition inline-flex items-center">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                        Anterior
+                    </button>
+                    <button onclick="loadContent('evals')" class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md transition inline-flex items-center">
+                        Siguiente: Evals para Arneses
+                        <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                    </button>
+                </div>
+            `,
+            'evals': `
+                <div class="mb-8">
+                    <h1 class="text-3xl md:text-4xl font-bold text-slate-800 mb-4 tracking-tight">Evaluaciones (Evals) Sistémicas</h1>
+                    <p class="text-lg text-slate-600 leading-relaxed">Las evaluaciones tradicionales miden si un chatbot da la respuesta correcta. Las evaluaciones de arneses (Agentic Evals) miden la <strong>trayectoria</strong> completa: ¿Eligió las herramientas correctas? ¿Se recuperó de un fallo? ¿Respetó los permisos?</p>
+                </div>
+
+                <div class="highlight">
+                    <h4 class="font-semibold text-blue-800 mb-2">El Ecosistema de Evaluación</h3>
+                    <p class="text-sm text-blue-900 m-0">Debes elegir el framework adecuado según la etapa operativa. Evaluar agentes RAG no es lo mismo que evaluar agentes de código autónomo.</p>
+                </div>
+
+                <h2 class="text-2xl font-semibold mt-10 mb-4 border-b pb-2">Frameworks Dominantes (2026)</h2>
+                
+                <table class="w-full text-sm mt-4 shadow-sm">
+                    <thead>
+                        <tr>
+                            <th class="w-1/4">Framework</th>
+                            <th class="w-1/4">Enfoque</th>
+                            <th class="w-1/2">Caso de Uso Óptimo en Arnés</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="font-semibold text-slate-800">Promptfoo</td>
+                            <td>Red Teaming / CLI</td>
+                            <td>Evaluaciones locales adversariales rápidas. Mapeo contra OWASP/MITRE ATLAS. Pruebas de inyección de prompt antes de enviar a CI.</td>
+                        </tr>
+                        <tr>
+                            <td class="font-semibold text-slate-800">DeepEval</td>
+                            <td>Pruebas Unitarias (Pytest)</td>
+                            <td>Pruebas de tuberías RAG, generación de datos sintéticos y trazabilidad acoplada al pipeline de CI/CD.</td>
+                        </tr>
+                        <tr>
+                            <td class="font-semibold text-slate-800">Braintrust</td>
+                            <td>Observabilidad Prod</td>
+                            <td>Control de despliegues. Convierte fallos reales de usuarios en pruebas de regresión permanentes. Interfaces de revisión humana.</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3 class="text-xl font-semibold mt-8 mb-3">Integración CI/CD (Merge Blocking)</h3>
+                <p>Las Evals deben conectarse como <em>Quality Gates</em> en el pipeline. Si la precisión cae por debajo de un umbral (e.g., el modelo no respeta el esquema JSON el 98% de las veces en la evaluación), la integración de código se bloquea automáticamente. Es crucial separar el agente ejecutor del evaluador mediante <em>hooks</em> imperativos.</p>
+
+                <div class="mt-8 flex justify-between">
+                    <button onclick="loadContent('adversarial')" class="text-slate-500 hover:text-slate-800 font-medium transition inline-flex items-center">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                        Anterior
+                    </button>
+                    <button onclick="loadContent('adopcion')" class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md transition inline-flex items-center">
+                        Siguiente: Adopción y ROI
+                        <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                    </button>
+                </div>
+            `,
+            'adopcion': `
+                <div class="mb-8">
+                    <h1 class="text-3xl md:text-4xl font-bold text-slate-800 mb-4 tracking-tight">Privacidad, Ética y Adopción (ROI)</h1>
+                    <p class="text-lg text-slate-600 leading-relaxed">Superar el entorno de desarrollo y llevar agentes IA a producción empresarial requiere justificar el Retorno de Inversión (ROI) controlando los costos masivos de tokens y mitigando el riesgo de fuga de datos (PII).</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8 mt-6">
+                    <div class="bg-blue-50 border border-blue-200 p-5 rounded-lg">
+                        <h4 class="font-bold text-blue-800 text-lg mb-2">El Argumento del ROI (2026)</h4>
+                        <ul class="text-sm text-blue-900 space-y-2 list-disc pl-5">
+                            <li>El coste por interacción cae un <strong>85-90%</strong>.</li>
+                            <li>Empresas reportan un <strong>ROI de 3.5x</strong> en menos de 18 meses.</li>
+                            <li>Ideal para tareas repetitivas: triaje de tickets, reservas, análisis de logs básicos.</li>
+                        </ul>
+                    </div>
+                    <div class="bg-amber-50 border border-amber-200 p-5 rounded-lg">
+                        <h4 class="font-bold text-amber-800 text-lg mb-2">Control de Costos</h4>
+                        <p class="text-sm text-amber-900">Una arquitectura multi-agente incontrolada puede multiplicar los costos por consumo de tokens x15. Es obligatorio establecer <strong>límites duros</strong> en el arnés sobre cuántos ciclos iterativos puede realizar un agente antes de escalar a un humano.</p>
+                    </div>
+                </div>
+
+                <h2 class="text-2xl font-semibold mt-10 mb-4 border-b pb-2">Privacidad: Enmascaramiento y Hooks</h2>
+                <p>Las normativas exigen saber qué datos se envían al modelo de lenguaje (LLM). Las soluciones de infraestructura incluyen:</p>
+                
+                <ul class="list-none space-y-4 mb-6 mt-4">
+                    <li class="flex items-start">
+                        <span class="bg-indigo-100 text-indigo-700 rounded p-1 mr-3 mt-1"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg></span>
+                        <div>
+                            <strong class="text-slate-800 block">Hooks PostToolUse</strong>
+                            <span class="text-sm text-slate-600">El arnés ejecuta una limpieza determinista. Cuando el MCP extrae datos de la BD, el hook intercepta la respuesta, elimina PII (tarjetas, DNI) y *luego* inyecta el resultado seguro en el contexto del LLM.</span>
+                        </div>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="bg-indigo-100 text-indigo-700 rounded p-1 mr-3 mt-1"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z"></path></svg></span>
+                        <div>
+                            <strong class="text-slate-800 block">Despliegues en VPC (AWS Bedrock)</strong>
+                            <span class="text-sm text-slate-600">Para residencia de datos estricta, los modelos se instancian dentro de la infraestructura delegada privada (Zero-Ops). Se garantiza contractualmente que los prompts no entrenan modelos públicos.</span>
+                        </div>
+                    </li>
+                </ul>
+
+                <div class="mt-8 flex justify-between">
+                    <button onclick="loadContent('evals')" class="text-slate-500 hover:text-slate-800 font-medium transition inline-flex items-center">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                        Anterior
+                    </button>
+                    <button onclick="loadContent('vectorial')" class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md transition inline-flex items-center">
+                        Siguiente Módulo: BD Vectoriales
+                        <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                    </button>
+                </div>
+            `,
+            'vectorial': `
+                <div class="mb-8">
+                    <h1 class="text-3xl md:text-4xl font-bold text-slate-800 mb-4 tracking-tight">Bases de Datos Vectoriales y RAG</h1>
+                    <p class="text-lg text-slate-600 leading-relaxed">El almacenamiento semántico es el corazón de las aplicaciones RAG. Escalar de un prototipo a producción revela diferencias masivas en latencia y costos según la arquitectura del índice y el motor de BD.</p>
+                </div>
+
+                <div class="highlight">
+                    <h4 class="font-semibold text-blue-800 mb-2">El Problema de la RAM y HNSW</h4>
+                    <p class="text-sm text-blue-900 m-0">Los índices HNSW ofrecen baja latencia pero exigen que todo el grafo viva en RAM. 50 millones de vectores pueden costar miles de dólares mensuales solo en memoria.</p>
+                </div>
+
+                <h2 class="text-2xl font-semibold mt-10 mb-4 border-b pb-2">Selección de Base de Datos Vectorial</h2>
+                
+                <table class="w-full text-sm mt-4 shadow-sm">
+                    <thead>
+                        <tr>
+                            <th class="w-1/4">Sistema</th>
+                            <th class="w-1/2">Arquitectura y Escala</th>
+                            <th class="w-1/4">Perfil (Cargas Masivas)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="font-semibold text-slate-800">pgvector (Postgres)</td>
+                            <td>Ideal < 5M vectores. ACID total. Para escalas mayores exige <code class="bg-slate-100 px-1 rounded text-xs">pgvectorscale</code> (StreamingDiskANN en disco).</td>
+                            <td>Bajo coste si se recicla infra. Alto en RAM de lo contrario.</td>
+                        </tr>
+                        <tr>
+                            <td class="font-semibold text-slate-800">Qdrant</td>
+                            <td>Motor Rust optimizado. Latencias consistentes en filtrado de metadatos masivos.</td>
+                            <td>Extremadamente eficiente. Menor uso relativo de memoria.</td>
+                        </tr>
+                        <tr>
+                            <td class="font-semibold text-slate-800">Pinecone</td>
+                            <td>Serverless. Optimo para Billones (Zero-Ops). Filtrado de metadatos costoso.</td>
+                            <td>Costos elevados y opacos por unidad de lectura.</td>
+                        </tr>
+                        <tr>
+                            <td class="font-semibold text-slate-800">Weaviate</td>
+                            <td>Arquitectura modular. Búsqueda híbrida nativa.</td>
+                            <td>Equilibrado y predecible.</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3 class="text-xl font-semibold mt-8 mb-3">La Necesidad de Búsqueda Híbrida</h3>
+                <p>La recuperación semántica (vectores) falla al buscar términos exactos como UUIDs o nombres de productos precisos. Los sistemas modernos deben implementar <strong>Búsqueda Híbrida</strong>: fusionar puntuaciones vectoriales (similitud coseno) con métricas dispersas de palabras clave (BM25) y pasar por un algoritmo de re-ranking.</p>
+
+                <div class="mt-8 flex justify-between">
+                    <button onclick="loadContent('adopcion')" class="text-slate-500 hover:text-slate-800 font-medium transition inline-flex items-center">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                        Anterior
+                    </button>
+                    <button onclick="loadContent('backend')" class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md transition inline-flex items-center">
+                        Siguiente: Modernización Backend
+                        <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                    </button>
+                </div>
+            `,
+            'backend': `
+                 <div class="mb-8">
+                    <h1 class="text-3xl md:text-4xl font-bold text-slate-800 mb-4 tracking-tight">Modernización de Backend y Proyectos Legacy</h1>
+                    <p class="text-lg text-slate-600 leading-relaxed">Exponer miles de líneas de código legacy a un LLM en un prompt causa saturación de contexto y reescrituras alucinadas. La modernización requiere abordajes quirúrgicos apoyados en herramientas de análisis sintáctico.</p>
+                </div>
+
+                <div class="bg-slate-50 p-6 rounded-lg border border-slate-200 mb-8">
+                    <h4 class="font-bold text-slate-800 mb-4 text-lg">Estrategia Segura de Refactorización</h4>
+                    <ol class="space-y-4 list-decimal pl-5 text-slate-700">
+                        <li>
+                            <strong class="text-slate-900 block mb-1">Exploración con AST (Abstract Syntax Tree):</strong>
+                            No se lee el texto crudo. Se equipa al agente con un servidor MCP de sistema de archivos capaz de leer el AST para entender las dependencias y abstracciones sin cargar el ruido del código en el contexto.
+                        </li>
+                        <li>
+                            <strong class="text-slate-900 block mb-1">Inferencia de Negocio desde BD:</strong>
+                            El agente inspecciona la base de datos relacional (MCP solo lectura) para deducir reglas de negocio no documentadas basándose en las restricciones (constraints) y claves foráneas.
+                        </li>
+                        <li>
+                            <strong class="text-slate-900 block mb-1">Generación de ADR (Architectural Decision Record):</strong>
+                            Antes de tocar código, el agente planificador documenta las reglas descubiertas y los límites propuestos para el nuevo microservicio.
+                        </li>
+                        <li>
+                            <strong class="text-slate-900 block mb-1">Ejecución Aislada (WorkTrees):</strong>
+                            Sub-agentes confinados en entornos WorkTrees ejecutan la reescritura, bloqueados rígidamente por las restricciones estipuladas en el ADR.
+                        </li>
+                    </ol>
+                </div>
+
+                <div class="mt-8 flex justify-between">
+                    <button onclick="loadContent('vectorial')" class="text-slate-500 hover:text-slate-800 font-medium transition inline-flex items-center">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                        Anterior
+                    </button>
+                    <button onclick="loadContent('qa')" class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md transition inline-flex items-center">
+                        Siguiente: Automatización QA
+                        <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                    </button>
+                </div>
+            `,
+            'qa': `
+                 <div class="mb-8">
+                    <h1 class="text-3xl md:text-4xl font-bold text-slate-800 mb-4 tracking-tight">Automatización de QA: Playwright y Agentes E2E</h1>
+                    <p class="text-lg text-slate-600 leading-relaxed">Las pruebas de extremo a extremo (E2E) frágiles basadas en selectores de DOM están siendo reemplazadas por modelos de visión e inferencia operando navegadores "headless" como Playwright.</p>
+                </div>
+
+                <div class="highlight">
+                    <h4 class="font-semibold text-blue-800 mb-2">De Selectores a Intenciones</h4>
+                    <p class="text-sm text-blue-900 m-0">En lugar de escribir <code class="bg-blue-200 px-1 rounded">click('#submit-btn-v2')</code>, el Agente Evaluador opera bajo la intención "Añade el ítem al carrito y verifica que el total se actualice". El agente interpreta la UI visualmente o mediante el árbol de accesibilidad.</p>
+                </div>
+
+                <h2 class="text-2xl font-semibold mt-10 mb-4 border-b pb-2">El Bucle Percibir-Razonar-Actuar</h2>
+                
+                <p>Playwright se expone al Arnés como un servidor MCP, otorgándole capacidades motoras sobre la web:</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6 mb-8 text-center">
+                    <div class="bg-white p-4 border border-slate-200 rounded-lg shadow-sm">
+                        <div class="bg-blue-100 w-10 h-10 mx-auto rounded-full flex items-center justify-center text-blue-600 mb-3 font-bold">1</div>
+                        <h4 class="font-bold text-slate-800 text-sm">Planificación</h4>
+                        <p class="text-xs text-slate-500 mt-2">Agente supervisor lee los criterios de aceptación generados en la fase OpenSpec.</p>
+                    </div>
+                    <div class="bg-white p-4 border border-slate-200 rounded-lg shadow-sm">
+                        <div class="bg-blue-100 w-10 h-10 mx-auto rounded-full flex items-center justify-center text-blue-600 mb-3 font-bold">2</div>
+                        <h4 class="font-bold text-slate-800 text-sm">Ejecución</h4>
+                        <p class="text-xs text-slate-500 mt-2">Agente ejecutor inyecta instrucciones dinámicas a Playwright para navegar el DOM.</p>
+                    </div>
+                    <div class="bg-white p-4 border border-slate-200 rounded-lg shadow-sm">
+                        <div class="bg-blue-100 w-10 h-10 mx-auto rounded-full flex items-center justify-center text-blue-600 mb-3 font-bold">3</div>
+                        <h4 class="font-bold text-slate-800 text-sm">Verificación</h4>
+                        <p class="text-xs text-slate-500 mt-2">Se captura snapshot visual/accesibilidad. Si falla, genera log detallado para CI.</p>
+                    </div>
+                </div>
+
+                <p class="text-slate-700 bg-red-50 border-l-4 border-red-500 p-4 rounded text-sm"><strong>⚠️ Regla Crítica:</strong> Jamás utilices el mismo agente que escribió el código para generar o evaluar la prueba Playwright que lo valida. Utiliza ganchos <code class="bg-red-100 px-1 rounded">PostToolUse</code> para instanciar un contenedor y modelo diferente, previniendo los auto-aprobados alucinados.</p>
+
+                <div class="mt-8 flex justify-between">
+                    <button onclick="loadContent('backend')" class="text-slate-500 hover:text-slate-800 font-medium transition inline-flex items-center">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                        Anterior
+                    </button>
+                    <button onclick="loadContent('chatbots')" class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md transition inline-flex items-center">
+                        Siguiente Módulo: Interfaces Realtime
+                        <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                    </button>
+                </div>
+            `,
+            'chatbots': `
+                 <div class="mb-8">
+                    <h1 class="text-3xl md:text-4xl font-bold text-slate-800 mb-4 tracking-tight">Interfaces en Tiempo Real y RAG Avanzado</h1>
+                    <p class="text-lg text-slate-600 leading-relaxed">El estándar para interacciones de voz ha migrado de cascadas bloqueantes a arquitecturas de <strong>Streaming Concurrentes</strong> basadas en WebRTC.</p>
+                </div>
+
+                <div class="highlight">
+                    <h4 class="font-semibold text-blue-800 mb-2">El Fin de la Latencia Bloqueante</h4>
+                    <p class="text-sm text-blue-900 m-0">Antaño, el sistema grababa audio -> enviaba a STT (Speech-to-Text) -> enviaba texto al LLM -> enviaba a TTS -> reproducía. Hoy, las APIs Realtime fragmentan y solapan estos procesos permitiendo interrupciones naturales (barge-ins).</p>
+                </div>
+
+                <h2 class="text-2xl font-semibold mt-10 mb-4 border-b pb-2">Infraestructura WebRTC (LiveKit)</h2>
+                <p>Frameworks de transporte como LiveKit se han vuelto esenciales para manejar la orquestación bidireccional. Mantienen un canal abierto y constante, permitiendo que:</p>
+                
+                <ul class="list-disc pl-6 space-y-2 mb-6 mt-4 text-slate-700">
+                    <li>Las transcripciones parciales se inyecten en tiempo real al modelo.</li>
+                    <li>El agente pueda ajustar su atención si el usuario interrumpe abruptamente la síntesis de voz.</li>
+                    <li>El canal de estado persista sin reinicios, a diferencia de los websockets simples.</li>
+                </ul>
+
+                <h3 class="text-xl font-semibold mt-8 mb-3">La Fusión con RAG</h3>
+                <p>Una interfaz de voz en tiempo real alucinando respuestas rápidamente es peligrosa. Se acoplan conductos RAG que buscan hechos en paralelo (usando búsqueda híbrida y re-ranking) e inyectan el contexto empírico en fracciones de segundo antes de que el agente genere la respuesta de audio.</p>
+
+                <div class="mt-8 flex justify-between">
+                    <button onclick="loadContent('qa')" class="text-slate-500 hover:text-slate-800 font-medium transition inline-flex items-center">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                        Anterior
+                    </button>
+                    <button onclick="loadContent('multiagente')" class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md transition inline-flex items-center">
+                        Siguiente: Topologías Multi-Agente
+                        <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                    </button>
+                </div>
+            `,
+            'multiagente': `
+                 <div class="mb-8">
+                    <h1 class="text-3xl md:text-4xl font-bold text-slate-800 mb-4 tracking-tight">Arquitecturas y Topologías Multi-Agente (MAS)</h1>
+                    <p class="text-lg text-slate-600 leading-relaxed">Desplegar múltiples agentes indiscriminadamente incurre en altas penalizaciones financieras y amplifica errores (hasta 17.2x) si no hay orquestación centralizada. La clave es la estructura de control.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8 mb-10">
+                    <div class="border border-slate-200 rounded-lg p-5 shadow-sm relative overflow-hidden">
+                        <div class="absolute top-0 right-0 bg-blue-500 text-white text-[10px] font-bold px-2 py-1 rounded-bl">ENTERPRISE</div>
+                        <h4 class="font-bold text-slate-800 mb-3 border-b pb-2">Jerárquica (Supervisor)</h4>
+                        <p class="text-sm text-slate-600">Un orquestador central recibe el objetivo, planifica e instancia sub-agentes limitados. Impide propagación de fallos y bucles infinitos. <strong>Topología más segura.</strong></p>
+                    </div>
+                    <div class="border border-slate-200 rounded-lg p-5 shadow-sm relative overflow-hidden">
+                        <div class="absolute top-0 right-0 bg-green-500 text-white text-[10px] font-bold px-2 py-1 rounded-bl">CI/CD</div>
+                        <h4 class="font-bold text-slate-800 mb-3 border-b pb-2">Línea de Ensamblaje</h4>
+                        <p class="text-sm text-slate-600">Pipeline unidireccional. La salida verificada de un agente es la entrada del siguiente. Excelente para flujos predecibles como integraciones y pruebas.</p>
+                    </div>
+                    <div class="border border-slate-200 rounded-lg p-5 shadow-sm relative overflow-hidden">
+                        <div class="absolute top-0 right-0 bg-red-500 text-white text-[10px] font-bold px-2 py-1 rounded-bl">RESEARCH</div>
+                        <h4 class="font-bold text-slate-800 mb-3 border-b pb-2">Malla P2P (Descentralizada)</h4>
+                        <p class="text-sm text-slate-600">Agentes debaten libremente. Alta propensión a bucles e incremento masivo de costos de tokens. Evitar en producción rígida.</p>
+                    </div>
+                </div>
+
+                <h2 class="text-2xl font-semibold mb-4 border-b pb-2">Comparativa de Frameworks (2026)</h2>
+                
+                <table class="w-full text-sm mt-4 shadow-sm">
+                    <thead>
+                        <tr>
+                            <th class="w-1/3">Framework</th>
+                            <th class="w-2/3">Características y Casos de Uso</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="font-semibold text-slate-800 bg-slate-50">LangGraph</td>
+                            <td class="bg-white">Grafo dirigido estricto (Nodos/Aristas). Estado global tipado. Óptima observabilidad y resiliencia. El estándar para sistemas empresariales auditables.</td>
+                        </tr>
+                        <tr>
+                            <td class="font-semibold text-slate-800 bg-slate-50">CrewAI</td>
+                            <td class="bg-white">Centrado en perfiles/roles humanos. Delegativo. Excelente para prototipado rápido y equipos no puramente matemáticos.</td>
+                        </tr>
+                        <tr>
+                            <td class="font-semibold text-slate-800 bg-slate-50">AutoGen</td>
+                            <td class="bg-white">Ciclos de chat libres. Complejo de depurar en producción (el estado es el historial del chat). Útil para simulaciones e investigación.</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="mt-10 p-6 bg-slate-800 text-white rounded-lg shadow-lg text-center">
+                    <h3 class="text-2xl font-bold text-blue-400 mb-2">Fin del Curso</h3>
+                    <p class="text-slate-300">Has completado el Currículo Avanzado en Arquitectura e Ingeniería de Sistemas Basados en Agentes IA.</p>
+                </div>
+
+                <div class="mt-8 flex justify-start">
+                    <button onclick="loadContent('chatbots')" class="text-slate-500 hover:text-slate-800 font-medium transition inline-flex items-center">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                        Anterior
+                    </button>
+                </div>
+            `
+        };
+
+        
+        // Load content based on ID
+        function loadContent(id) {
+            const contentArea = document.getElementById('content-area');
+            const breadcrumb = document.getElementById('breadcrumb');
+            
+            // Inject HTML content
+            if (courseContent[id]) {
+                // Add fade effect
+                contentArea.style.opacity = 0;
+                
+                setTimeout(() => {
+                    contentArea.innerHTML = courseContent[id];
+                    contentArea.style.opacity = 1;
+                    contentArea.style.transition = 'opacity 0.3s ease-in-out';
+                    
+                    // Scroll to top
+                    document.getElementById('content-area').scrollTop = 0;
+                }, 150);
+            }
+
+            // Update active state in sidebar
+            const links = document.querySelectorAll('.nav-link');
+            links.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('onclick').includes(id)) {
+                    link.classList.add('active');
+                    
+                    // Determine module for breadcrumb based on DOM position (simple approach)
+                    const moduleTitle = link.closest('div').querySelector('h3').innerText;
+                    const sectionTitle = link.innerText;
+                    breadcrumb.innerHTML = `<span class="hidden sm:inline">${moduleTitle} / </span><span class="text-slate-800 font-semibold">${sectionTitle}</span>`;
+                }
+            });
+            
+            // Close mobile menu if open
+            if (window.innerWidth < 1024) {
+                toggleMobileMenu(true);
+            }
+        }
+
+        // Copy Code Functionality
+        function copyCode(elementId) {
+            const codeEl = document.getElementById(elementId);
+            // Replace <br> with newlines for copying
+            const textToCopy = codeEl.innerHTML.replace(/<br\s*[\/]?>/gi, '\n').replace(/&lt;/g, '<').replace(/&gt;/g, '>');
+            
+            navigator.clipboard.writeText(textToCopy).then(() => {
+                const btn = codeEl.parentElement.previousElementSibling.querySelector('button');
+                const originalText = btn.innerText;
+                btn.innerText = '¡Copiado!';
+                btn.classList.add('text-green-400');
+                
+                setTimeout(() => {
+                    btn.innerText = originalText;
+                    btn.classList.remove('text-green-400');
+                }, 2000);
+            });
+        }
+
+        // Mobile Menu Toggle
+        function toggleMobileMenu(forceClose = false) {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('mobile-overlay');
+            
+            if (forceClose || !sidebar.classList.contains('-translate-x-full')) {
+                sidebar.classList.add('-translate-x-full');
+                overlay.classList.add('hidden');
+            } else {
+                sidebar.classList.remove('-translate-x-full');
+                overlay.classList.remove('hidden');
+            }
+        }
+
+        // Initialize App
+        document.addEventListener('DOMContentLoaded', () => {
+            loadContent('harness'); // Load initial content
+            
+            // Handle window resize for mobile menu states
+            window.addEventListener('resize', () => {
+                if (window.innerWidth >= 1024) {
+                    document.getElementById('sidebar').classList.remove('-translate-x-full');
+                    document.getElementById('mobile-overlay').classList.add('hidden');
+                } else {
+                    document.getElementById('sidebar').classList.add('-translate-x-full');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
